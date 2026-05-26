@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> Beep-o-tron</title>
+  <script type='text/javascript' src='beep-o-tron.js'></script>  
+  <style type='text/css'>
+    body {
+    font-size: 12px; padding: 0px; margin: 0px;
+	}
+	#listDiv 
+	{
+		background-color: #ccc;
+		height: 100px;
+		overflow: auto;
+		padding: 15px;
+		-webkit-overflow-scrolling: touch;
+	}
+	ul#list 
+	{
+		list-style-type: none;
+		margin: 0px;
+		padding: 5px;
+	}
+	ul#list li 
+	{
+		height: 15px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+	}
+	.sound 
+	{
+		background-color: #fff;
+		border: 1px solid #aaa;
+		padding: 5px;
+		margin: 5px;
+		 display: inline;
+	}
+
+	.sound:hover {
+    border:1px solid #0000ff;
+	}	
+	.sound span{
+		padding: 5px;
+		margin: 5px;
+	}
+  </style>
+</head>
+<body>
+  Beep-o-tron, maak zelf gamegeluiden.<br>
+<br>
+ <fieldset>
+ <legend>Maken</legend>
+Snelstart: <button onClick=setPreset("hit")>raak</button>
+    <button onClick=setPreset("bonus")>bonus</button>
+    <button onClick=setPreset("explo")>explo</button>
+<br>
+<table>
+<tr>
+	<td>complexity:</td>
+	<td><input type="range" oninput="showVal(this.value,'cv')" onchange="showVal(this.value,'cv')" min=0 max=4 value=2 id="complexity"> <span id="cv">2</span></td>
+</tr>
+<tr>
+	<td>length:</td>
+	<td>	<input type="float" min=0 max=10 id="length" value="0.2"> sec</td>
+</tr>
+<tr>
+	<td>crunch</td>
+	<td><input type="range" oninput="showVal(this.value,'crv')" onchange="showVal(this.value,'crv')" min=0 max=10000 id="crunch" value="2000"> <span id="crv">2000</span></td>
+</tr>
+</table>
+<button id="start" onClick=startTest()>Afspelen</button>
+<button id="start" onClick=startTest()>Variatie</button>
+<button id="start" onClick=startTest()>Maak Nieuw</button>
+<button id="start" onClick=startTest()>Save</button>
+<button id="start" onClick=startTest()>geavanceerd</button>
+
+	</fieldset>
+ <fieldset>
+ <legend>Mijn geluiden</legend>
+<button id="save">Bewaren</button>
+  <div id="listDiv">
+       <div class="sound" onClick="playSound(0)"><span>Geluid 1</span><button>x</button></li></div>
+       <div class="sound" onClick="playSound(1)"><span>Geluid 1</span><button>x</button></li></div>
+  </div>
+  </fieldset>
+</body>
+
+</html>
+

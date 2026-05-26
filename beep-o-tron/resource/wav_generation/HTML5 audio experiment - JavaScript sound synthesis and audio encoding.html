@@ -1,0 +1,132 @@
+
+<!-- saved from url=(0032)http://www.codebase.es/riffwave/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>HTML5 audio experiment - JavaScript sound synthesis and audio encoding</title>
+</head>
+<body onload="sh_highlightDocument(&#39;lang/&#39;, &#39;.js&#39;);">
+<link rel="stylesheet" href="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/sh_style.css">
+<link href="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/css" rel="stylesheet" type="text/css">
+<link href="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/css(1)" rel="stylesheet" type="text/css">
+<script src="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/sh_main.min.js"></script>
+<script src="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/sh_javascript.min.js"></script>
+<script src="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/riffwave.js"></script>
+<style>
+body { font-family: "Droid Sans"; margin: 16px 32px; }
+pre { font-family: "Droid Sans Mono"; }
+button { font-family: "Droid Sans"; font-size: 150%; }
+</style>
+<script>
+
+// NOISE
+var noise = []; for (var i=0; i<10000; i++) noise[i] = Math.round(128*Math.random());
+var wave1 = new RIFFWAVE(noise);
+var audio1 = new Audio(wave1.dataURI);
+
+// SINE WAVE
+var sine = []; for (var i=0; i<10000; i++) sine[i] = 128+Math.round(127*Math.sin(i/5));
+var wave2 = new RIFFWAVE(sine);
+var audio2 = new Audio(wave2.dataURI);
+
+// EFFECT
+var effect = []; for (var i=0; i<35000; i++) effect[i] = 64+Math.round(32*(Math.cos(i*i/2000)+Math.sin(i*i/4000)));
+var wave3 = new RIFFWAVE();
+wave3.header.sampleRate = 22000;
+wave3.Make(effect);
+var audio3 = new Audio(wave3.dataURI);
+
+// STEREO
+var wave4 = new RIFFWAVE();
+wave4.header.sampleRate = 22000;
+wave4.header.numChannels = 2;
+wave4.header.bitsPerSample = 16;
+var i = 0;
+var stereo = [];
+while (i<100000) {
+  stereo[i++] = 0;
+  stereo[i++] = 0x8000+Math.round(0x7fff*Math.sin(i/25));
+}
+while (i<200000) {
+  stereo[i++] = 0x8000+Math.round(0x7fff*Math.sin(i/100));
+  stereo[i++] = 0;
+}
+wave4.Make(stereo);
+var audio4 = new Audio(wave4.dataURI);
+
+function play(audio) {
+  if (!audio.paused) { // if playing stop and rewind
+    audio.pause();
+    audio.currentTime = 0;
+  }
+  audio.play();
+}
+
+</script>
+
+<h1>riffwave.js - HTML5 sound synthesis via PCM encoding</h1>
+
+<h2>What?</h2>
+
+<p>"<strong>riffwave.js</strong>" is a tiny javascript library that encodes audio 
+data to a format (<a href="http://en.wikipedia.org/wiki/Pulse-code_modulation">PCM</a>
+inside a <a href="http://en.wikipedia.org/wiki/RIFF_(File_format)">RIFF container</a>) that
+can be used to play synthesized sounds with the
+<a href="http://en.wikipedia.org/wiki/Html5_audio#Audio_format_support">HTML5 audio</a> element.</p>
+
+<p>Simply use the generated <a href="http://en.wikipedia.org/wiki/Data_Uri">data URI</a> as source.</p>
+
+<p>Works in:</p>
+<ul>
+<li>Chrome 9+</li>
+<li>Firefox 3.6+</li>
+<li>Opera 11+</li>
+</ul>
+<p>Other browsers not tested.</p>
+
+<p><span style="border:1px solid #ccc;font-size:100%;padding:4px;16px">
+Download <strong><a href="./HTML5 audio experiment - JavaScript sound synthesis and audio encoding_files/riffwave.js">riffwave.js</a></strong> (version 0.03)
+</span></p>
+
+<h2>Some tests</h2>
+
+<button onmousedown="play(audio1);">Noise</button>
+<button onmousedown="play(audio2);">Sine wave</button>
+<button onmousedown="play(audio3);">Effect</button>
+<button onmousedown="play(audio4);">Stereo</button>
+
+<h2>Sample usage</h2>
+
+<pre class="sh_javascript sh_sourceCode"><span class="sh_keyword">var</span> data <span class="sh_symbol">=</span> <span class="sh_symbol">[];</span> <span class="sh_comment">// just an array</span>
+<span class="sh_keyword">for</span> <span class="sh_symbol">(</span><span class="sh_keyword">var</span> i<span class="sh_symbol">=</span><span class="sh_number">0</span><span class="sh_symbol">;</span> i<span class="sh_symbol">&lt;</span><span class="sh_number">10000</span><span class="sh_symbol">;</span> i<span class="sh_symbol">++)</span> data<span class="sh_symbol">[</span>i<span class="sh_symbol">]</span> <span class="sh_symbol">=</span> <span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">round</span><span class="sh_symbol">(</span><span class="sh_number">255</span> <span class="sh_symbol">*</span> <span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">random</span><span class="sh_symbol">());</span> <span class="sh_comment">// fill data with random samples</span>
+<span class="sh_keyword">var</span> wave <span class="sh_symbol">=</span> <span class="sh_keyword">new</span> <span class="sh_function">RIFFWAVE</span><span class="sh_symbol">(</span>data<span class="sh_symbol">);</span> <span class="sh_comment">// create the wave file</span>
+<span class="sh_keyword">var</span> audio <span class="sh_symbol">=</span> <span class="sh_keyword">new</span> <span class="sh_function">Audio</span><span class="sh_symbol">(</span>wave<span class="sh_symbol">.</span>dataURI<span class="sh_symbol">);</span> <span class="sh_comment">// create the HTML5 audio element</span>
+audio<span class="sh_symbol">.</span><span class="sh_function">play</span><span class="sh_symbol">();</span> <span class="sh_comment">// some noise</span>
+</pre>
+
+<h2>Another one</h2>
+<pre class="sh_javascript sh_sourceCode"><span class="sh_keyword">var</span> audio <span class="sh_symbol">=</span> <span class="sh_keyword">new</span> <span class="sh_function">Audio</span><span class="sh_symbol">();</span> <span class="sh_comment">// create the HTML5 audio element</span>
+<span class="sh_keyword">var</span> wave <span class="sh_symbol">=</span> <span class="sh_keyword">new</span> <span class="sh_function">RIFFWAVE</span><span class="sh_symbol">();</span> <span class="sh_comment">// create an empty wave file</span>
+<span class="sh_keyword">var</span> data <span class="sh_symbol">=</span> <span class="sh_symbol">[];</span> <span class="sh_comment">// yes, it's an array</span>
+
+wave<span class="sh_symbol">.</span>header<span class="sh_symbol">.</span>sampleRate <span class="sh_symbol">=</span> <span class="sh_number">44100</span><span class="sh_symbol">;</span> <span class="sh_comment">// set sample rate to 44KHz</span>
+wave<span class="sh_symbol">.</span>header<span class="sh_symbol">.</span>numChannels <span class="sh_symbol">=</span> <span class="sh_number">2</span><span class="sh_symbol">;</span> <span class="sh_comment">// two channels (stereo)</span>
+
+<span class="sh_keyword">var</span> i <span class="sh_symbol">=</span> <span class="sh_number">0</span><span class="sh_symbol">;</span>
+<span class="sh_keyword">while</span> <span class="sh_symbol">(</span>i<span class="sh_symbol">&lt;</span><span class="sh_number">100000</span><span class="sh_symbol">)</span> <span class="sh_cbracket">{</span> 
+  data<span class="sh_symbol">[</span>i<span class="sh_symbol">++]</span> <span class="sh_symbol">=</span> <span class="sh_number">128</span><span class="sh_symbol">+</span><span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">round</span><span class="sh_symbol">(</span><span class="sh_number">127</span><span class="sh_symbol">*</span><span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">sin</span><span class="sh_symbol">(</span><span class="sh_normal">i</span><span class="sh_symbol">/</span><span class="sh_number">10</span><span class="sh_symbol">));</span> <span class="sh_comment">// left speaker</span>
+  data<span class="sh_symbol">[</span>i<span class="sh_symbol">++]</span> <span class="sh_symbol">=</span> <span class="sh_number">128</span><span class="sh_symbol">+</span><span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">round</span><span class="sh_symbol">(</span><span class="sh_number">127</span><span class="sh_symbol">*</span><span class="sh_predef_var">Math</span><span class="sh_symbol">.</span><span class="sh_function">sin</span><span class="sh_symbol">(</span><span class="sh_normal">i</span><span class="sh_symbol">/</span><span class="sh_number">200</span><span class="sh_symbol">));</span> <span class="sh_comment">// right speaker</span>
+<span class="sh_cbracket">}</span>
+
+wave<span class="sh_symbol">.</span><span class="sh_function">Make</span><span class="sh_symbol">(</span>data<span class="sh_symbol">);</span> <span class="sh_comment">// make the wave file</span>
+audio<span class="sh_symbol">.</span>src <span class="sh_symbol">=</span> wave<span class="sh_symbol">.</span>dataURI<span class="sh_symbol">;</span> <span class="sh_comment">// set audio source</span>
+audio<span class="sh_symbol">.</span><span class="sh_function">play</span><span class="sh_symbol">();</span> <span class="sh_comment">// we should hear two tones one on each speaker</span>
+</pre>
+
+<hr>
+
+<p>by Pedro Ladaria &lt;pedro.ladaria at gmail dot com&gt;<br>
+twitter: @pladaria</p>
+<p><a href="http://www.codebase.es/">Go home</a></p>
+
+
+
+</body></html>

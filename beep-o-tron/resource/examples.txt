@@ -1,0 +1,72 @@
+
+Example of simplest setup imaginable
+"o":
+[
+{"t":1,"f":"440","v":"0.5","c":-1}
+],
+
+"l":0.3
+}
+
+Example of no master volume envelope
+{"o":[
+{"t":3,"f":"440.000","v":"1","c":-1},
+{"t":2,"f":"11","v":"1","c":0
+,"ve":[{"t":0,"v":-220},
+{"t":1,"v":220.0}]
+}],
+"l":1.5}
+
+
+Example of a volume envelope on a oscillator{
+{"o":[
+{"t":3,"f":"440.000","v":"1","c":-1
+,"ve":[{"t":0,"v":0},
+{"t":1,"v":1.0}]
+}],
+"l":1.5,
+"e":[{"t":0,"v":1},{"t":1,"v":1}]}
+
+
+Example of a volume envelope on a modifier (you need to give it a bit of amplitude, so we should multiply with the v given!)
+{"o":[
+{"t":3,"f":"440.000","v":"1","c":-1},
+{"t":2,"f":"11","v":"1","c":0
+,"ve":[{"t":0,"v":1},
+{"t":1,"v":800.0}]
+}],
+"l":1.5,
+"e":[{"t":0,"v":1},{"t":1,"v":1}]}
+
+quite equivalent to:
+{"o":[
+{"t":3,"f":"440.000","v":"1","c":-1},
+{"t":2,"f":"11","v":"800","c":0
+,"ve":[{"t":0,"v":0},
+{"t":1,"v":1}]
+}],
+"l":1.5,
+"e":[{"t":0,"v":1},{"t":1,"v":1}]}
+
+
+Example of simple oscillator/modifier stack for real game sounds.
+{"o":[
+{"t":0,"f":440,"v":1,"c":-1},
+{"t":2,"f":4,"v":-2,"c":0},
+{"t":3,"f":8,"v":-128,"c":0},
+{"t":3,"f":16,"v":64,"c":0},
+{"t":1,"f":32,"v":-32,"c":0}
+],
+
+"l":0.2,
+"e":[{"t":0,"v":1},
+{"t":1,"v":0}]}
+
+example of simple frequency envelope (should give you like a test tone sweep)
+{"o":[
+{"t":1,"f":"440.000","v":"1","c":-1,
+"fe":
+[{"t":0,"v":0},
+{"t":1,"v":1}]}
+],
+"l":0.7}

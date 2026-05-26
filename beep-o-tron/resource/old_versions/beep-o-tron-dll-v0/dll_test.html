@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - Beep-o-tron dll -test</title>
+<script type='text/javascript'>
+
+var beepotron;
+function init()
+{
+	beepotron = document.getElementById("beepotron").contentWindow;
+}
+function play(r)
+{
+	beepotron.postMessage(JSON.stringify(r),
+	  window.location.protocol + "//"+window.location.hostname+":" + window.location.port
+    );
+}
+function showDLL()
+{
+	document.getElementById("beepotron").style.display='';
+}
+</script>  
+</head>
+<body onload="init()">
+<iframe style="display:none;" id="beepotron" src="dll.html"></iframe>
+<button onClick="showDLL()">ShowDLL.</button>
+<button onClick='play({"o":[{"t":2,"f":"510.287","v":0.03334863076861126,"c":-1},{"t":3,"f":"0.100","v":"179.926","c":0},{"t":3,"f":"0.290","v":"-43.938","c":0},{"t":0,"f":"1.810","v":"251.965","c":0},{"t":3,"f":"17.662","m":"v","v":"0.836","c":2}],"l":1,"e":[{"t":0,"v":0.6},{"t":0.4,"v":0.7},{"t":1,"v":0.8}],"k":"beep","v":1})'>Play Soundfx1.</button>
+<button onClick='play({"o":[
+{"t":1,"f":"168.619","v":0.08615297201226406,"c":-1},
+{"t":3,"f":"0.100","m":"v","v":null,"c":-1},
+{"t":1,"f":"0.123","m":"v","v":"0.548","c":0},
+{"t":0,"f":"7.157","m":"v","v":"0.447","c":1},
+{"t":2,"f":"14.058","m":"v","v":"0.852","c":2}
+],
+"l":0.4,
+"e":[{"t":0,"v":1},
+{"t":1,"v":0}],"k":"beep","v":1})'>Play Soundfx2.</button>
+
+<button onClick='play({"k":"beep-o-tron","v":1,"o":[
+{"t":0,"f":440,"v":0.0081,"c":-1},
+{"t":2,"f":4,"v":-2,"c":0},
+{"t":3,"f":8,"v":-128,"c":0},
+{"t":3,"f":16,"v":64,"c":0},
+{"t":1,"f":32,"v":-32,"c":0}
+],
+
+"l":0.2,
+"e":[{"t":0,"v":1},
+{"t":1,"v":0}]})'>Play Soundfx3.</button>
+<button onClick='play({"o":[
+{"t":0,"f":785.5,"v":0.03546,"c":-1},
+{"t":1,"f":785.1,"v":0.045,"c":-1},
+{"t":0,"f":0.155,"v":-486.6,"c":0},
+{"t":0,"f":0.155,"v":-486.6,"c":1},
+{"t":1,"f":3,"m":"f","v":0.823,"c":3}
+],
+
+"l":1.6,
+"e":[{"t":0,"v":1},
+{"t":1,"v":0}],"v":1})'>Play Soundfx4.</button>
+<button onClick='play({"o":[
+{"f":695.284375,"v":0.5628521249999999,"t":2,"c":-1},{"f":56.40375,"v":413.7,"t":1,"c":2},{"f":0.7101249999999999,"v":317.2,"t":1,"c":1},{"f":2.563921875,"v":85.2,"t":3,"c":1},{"f":10.039671875,"v":5.9,"t":0,"c":3},{"f":4,"v":-58.5,"t":3,"c":0},{"f":8.297,"v":52.1,"t":1,"c":0},{"f":20.275,"v":-1.9,"t":1,"c":1}
+],
+
+"l":0.7475,
+"e":[{"t":0,"v":0.3},
+{"t":0.2,"v":0.1},
+{"t":1,"v":0}],"k":"beep","v":0.46875})'>Play Soundfx5.</button>
+
+</body>
+
+</html>
+

@@ -1,0 +1,29 @@
+<html>
+<title>Export as wav</title>
+<script type="text/javascript" src="exportwav.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+function generateAndDownload()
+{
+	var length=2;
+	var ctx=getExportContext(length); // we need an initial length for the buffer
+	var o=ctx.createOscillator();
+	o.type = "sine"; // Square wave
+	o.frequency.value = 440;	
+	o.connect(ctx.destination);
+    o.start(0);
+    o.stop(ctx.currentTime + length);
+	startExportOfContext(ctx);
+}
+
+//]]>
+</script>
+</head>
+<body>
+<h1>Generate Wav and download</h1>
+
+<input type="button" value="Generate and Download" onclick="generateAndDownload()">
+
+
+</body></html>

@@ -1,0 +1,92 @@
+<html>
+<title>Export as wav</title>
+<script type="text/javascript" src="exportwav.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+function generateAndDownload()
+{
+	var length=2;
+	var ctx=getExportContext(length); // we need an initial length for the buffer
+	var o=ctx.createOscillator();
+	
+	var env=ctx.createGain();
+	env.gain.value=0.5;
+	env.connect(ctx.destination);
+
+	var o=ctx.createOscillator();
+	o.type = "sine"; // Square wave
+	o.frequency.value = 440;	
+	o.connect(env);
+
+	var m=ctx.createOscillator();
+	m.type = "sine"; // Square wave
+	m.frequency.value = 10;	
+	
+	mod_gain=ctx.createGain();
+    mod_gain.gain.value =1500;
+    m.connect(mod_gain);	
+
+	mod_gain.connect(o.frequency);				
+	
+    o.start(0);
+    o.stop(ctx.currentTime + length);
+	m.start(0);
+	m.stop(ctx.currentTime + length);
+	
+
+	startExportOfContext(ctx);
+}
+
+function justListen()
+{
+	var length=2;
+
+	var ctx; // the default context you are going to hear this one!
+	if (typeof AudioContext !== "undefined") {
+		ctx = new AudioContext();
+	} else if (typeof webkitAudioContext !== "undefined") {
+		ctx = new webkitAudioContext();
+	} else {
+		window.alert("WebAudio isn't supported in this browser yet :-(");
+		// supported browsers include Chrome, Firefox, Edge, Safari, Opera
+		throw new Error('AudioContext not supported. :(');
+	}
+
+	var env=ctx.createGain();
+	env.gain.value=0.5;
+	env.connect(ctx.destination);
+
+	var o=ctx.createOscillator();
+	o.type = "sine"; // Square wave
+	o.frequency.value = 440;	
+	o.connect(env);
+
+	var m=ctx.createOscillator();
+	m.type = "sine"; // Square wave
+	m.frequency.value = 10;	
+	
+	mod_gain=ctx.createGain();
+    mod_gain.gain.value =1500;
+    m.connect(mod_gain);	
+
+	mod_gain.connect(o.frequency);				
+	
+    o.start(0);
+    o.stop(ctx.currentTime + length);
+	m.start(0);
+	m.stop(ctx.currentTime + length);
+}
+
+
+//]]>
+</script>
+</head>
+<body>
+<h1>Generate Wav and download</h1>
+
+<input type="button" value="Download" onclick="generateAndDownload()">
+<input type="button" value="Preview" onclick="justListen()">
+
+
+</body></html>

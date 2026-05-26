@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - Beep-o-tron demo</title>
+  <script type='text/javascript' src='beepotron.js'></script>
+  <script type='text/javascript' src='recipes.js'></script>
+  <script type='text/javascript' src='filemanagement.js'></script>
+  <script type='text/javascript' src='interface.js'></script>
+  <style type='text/css'>
+    body {
+	font-size:14px;
+	font-family:Arial;
+	font-weight:normal;
+}
+#cat-container{
+}	
+#controls{
+	width: 500px;
+	position: relative;
+}	
+.range-container{
+	padding: 0px;
+	margin: 0px;
+	width: 500px;
+	height: 25px;
+	overflow: hidden;
+	background-color: #ccc;
+	display: table-cell; vertical-align: middle;
+	position: absolute;
+}
+.range-label{
+	position: absolute;
+	width: 250px;
+	top: -5px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+.range-input{
+	position: absolute;
+	top: -7px;
+	right: 80px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+.range-value{
+	position: absolute;
+	right: 0px;
+	width: 50px;
+	text-align: right;
+	top: -5px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+
+#details {
+margin:0px;padding:0px;
+border:1px solid #000000;
+background-color: #eee;
+width:400px; 
+height: 120px;
+}
+
+#saved {
+margin:0px;padding:0px;
+border:1px solid #000000;
+background-color: #eee;
+width:400px; 
+height: 200px;
+ overflow-y: scroll !important; border: 1px solid #ccc;
+}#saved table{
+width:100%;
+margin:0px;padding:0px;
+border-collapse: collapse;
+}
+
+#saved td a {
+   border: 1px solid #333333;
+	border-width: 0px 1px 0px 0px;
+    color: #888;
+    text-decoration: none;
+    padding: 10px 10px 10px 10px;
+    display: inline-block;
+}
+#saved td a:hover {
+    color: #000;
+}
+
+
+#saved td:first-child a {
+    background-color: #ccc;
+    color: #444;
+	width: 200px;
+    text-decoration: none;
+	margin: 0px;
+	text-align: left;
+    padding: 10px 0px 10px 0px;
+    display: inline-block;
+}
+#saved td:first-child a:hover {
+    background-color: #888;
+    color: #ffffff;
+}
+
+#saved td:last-child a {
+   border: 1px solid #666;
+	border-width: 0px 1px 0px 0px;
+    background-color: #999999;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 10px 10px 10px;
+    display: inline-block;
+}
+#saved td:last-child a:hover {
+    background-color: #555;
+    color: #ffffff;
+}
+#saved tr:nth-child(odd)  { background-color:#ddd; }
+#saved tr:nth-child(even) { background-color:#eee; }
+#saved td{
+vertical-align:middle;
+border:1px solid #000000;
+border-width:1px 0px 0px 0px;
+text-align:left;
+padding:0px;
+font-size:14px;
+font-family:Arial;
+font-weight:normal;
+color:#000000;
+}
+#saved tr:first-child td{
+background-color:#bbb;
+border:0px solid #000000;
+text-align:center;
+border-width:1px 0px 0px 0px;
+font-size:16px;
+font-family:Arial;
+font-weight:bold;
+color:#fff;
+    padding: 5px 0px 5px 0px;
+}
+#saved tr td:last-child{
+text-align:right;
+}
+
+  </style>
+  
+<script type='text/javascript'>//<![CDATA[
+function addToUndoBuffer(r)
+{
+	if(undo[undo.length-1]!=r) // if something actually changed!
+		undo.push(r);
+}
+
+var undo=[];
+//]]> 
+
+</script>
+
+</head>
+<body>
+<table border="1">
+<tr>
+<td>
+<span class='titel'>Beep-o-tron</span> - maak je eigen game geluiden</span><br>
+<textarea id="recipe" rows="15" cols="70">
+</textarea><br>
+<div id="commands">
+<button id="start">&#9658;</button>
+<input type="checkbox" id="loop" value="0"> Loop
+<span style="width: 50px;"> </span><button id="undo">Undo</button>
+<span style="width: 50px;"> </span><button id="redo">Redo</button>
+<span style="width: 50px;"> </span><button id="export">Download Lib</button>
+<span style="width: 50px;"> </span><button id="import">Upload Lib</button>
+<span style="width: 50px;"> </span><button id="saveas">Opslaan Als</button>
+<span style="width: 50px;"> </span><button id="save">Opslaan</button>
+<br>
+Nieuw: 
+<select id="createKind" title="Mix uit categorie" id="createMix">
+<option value="random">Willekeurig</option>
+<option value="musical">Muzikaal</option>
+<option value="game1">Simpel Game geluid</option>
+<option value="game2">Medium Game geluid</option>
+<option value="game3">Complex Game geluid</option>
+<option value="mix">Mix willekeurige categorie</option>
+</select>
+<button title="Maak nu" id="createSelected">Maak Nieuw</button>
+<br>
+
+Varieer:
+<button title="Maak met zelfde complexiteit" id="create">&#8635;</button> - 
+<button title="Varieer meest" id="vary_all">&#8630;</button>
+<button title="Varieer meer" id="vary_two">&Phi;</button>
+<button title="Varieer beetje" id="vary_one">&Xi;</button>
+<button title="Varieer toon" id="varytone">&#10160;</button>  
+<button title="Varieer aanslag" id="varyenvelope">&#8669;</button> - 
+<button id="crunch_down">&#8675;</button>
+<button id="crunch_up">&#8673;</button> - 
+<button id="pitch_down">&#9664;</button>
+<button id="pitch_up">&#9654;</button>
+<button id="octave_up">&#9650;</button>
+<button id="octave_down">&#9660;</button> - 
+<button id="normalise">&#10162;</button> - 
+<button id="undistort">&curren;</button>
+<button id="distort">&Theta;</button>
+<br>
+
+
+
+</div>
+<div id="controls">
+</div>
+</td>
+<td>
+<span>Bewaarde geluiden -catergorie: </span><span id="cat-container"></span>
+<div id="saved">
+</div>
+<div id="details">
+</div>
+</td>
+</tr>
+</table>
+  
+</body>
+
+</html>
+

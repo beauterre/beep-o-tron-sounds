@@ -1,0 +1,18 @@
+http://egonelbre.com/project/jsfx/
+http://jeromeetienne.github.io/webaudiox/examples/jsfx.html
+
+http://www.taktech.org/takm/WebFMSynth/
+
+http://stackoverflow.com/questions/22560413/html5-web-audio-convert-audio-buffer-into-wav-file
+->https://gist.github.com/pramodtech/9760681
+
+https://github.com/mattdiamond/Recorderjs/blob/master/recorderWorker.js
+
+
+
+TEST:
+Chrome: werkt
+Firefox: werkt
+IE: werkt niet (active X beperkt, toestemming, dan ...)
+Edge schijnt het wel te doen.
+Opera werkt.

@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - Beep-o-tron dll -test</title>
+<script type='text/javascript'>
+
+var beepotron;
+function init()
+{
+	beepotron = document.getElementById("beepotron").contentWindow;
+
+}
+function play()
+{
+	var r='{"o":[{"t":2,"f":"510.287","v":0.03334863076861126,"c":-1},{"t":3,"f":"0.100","v":"179.926","c":0},{"t":3,"f":"0.290","v":"-43.938","c":0},{"t":0,"f":"1.810","v":"251.965","c":0},{"t":3,"f":"17.662","m":"v","v":"0.836","c":2}],"l":1,"e":[{"t":0,"v":0.6},{"t":0.4,"v":0.7},{"t":1,"v":0.8}],"k":"beep","v":1}';
+	beepotron.postMessage("text",
+	  ""
+    );
+}
+</script>  
+</head>
+<body onload="init()">
+<iframe id="beepotron" src="dll.html"></iframe>
+<button onClick="play()">Play Soundfx.</button>
+</body>
+
+</html>
+

@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - Beep-o-tron dll</title>
+  <script type='text/javascript' src='beepotron.js'></script>
+<script type='text/javascript'>
+
+function listener(event){
+  if ( event.origin !== "http://localhost" ) return; 
+  console.log("received: "+event.data);
+}
+
+function setUpWindowListener()
+{
+	if (window.addEventListener){
+	  addEventListener("message", listener, false)
+	} else {
+	  attachEvent("onmessage", listener)
+	}
+}
+
+function init()
+{
+	setUpWindowListener();
+	var interfaceAudioContext; // the default context you are going to hear!
+	if (typeof AudioContext !== "undefined") {
+		interfaceAudioContext = new AudioContext();
+	} else if (typeof webkitAudioContext !== "undefined") {
+		/*jshint newcap:false*/
+		interfaceAudioContext = new webkitAudioContext();
+	} else {
+		window.alert("WebAudio isn't supported in this browser yet :-(");
+		// supported browsers include Chrome, Firefox, Edge, Safari, Opera
+		throw new Error('AudioContext not supported. :(');
+	}
+
+
+	console.log("play a beep in "+interfaceAudioContext);
+
+	var r=JSON.parse('{"o":[{"t":2,"f":"510.287","v":0.03334863076861126,"c":-1},{"t":3,"f":"0.100","v":"179.926","c":0},{"t":3,"f":"0.290","v":"-43.938","c":0},{"t":0,"f":"1.810","v":"251.965","c":0},{"t":3,"f":"17.662","m":"v","v":"0.836","c":2}],"l":1,"e":[{"t":0,"v":0.6},{"t":0.4,"v":0.7},{"t":1,"v":0.8}],"k":"beep","v":1}');
+	playSfx(r,1,0,0,interfaceAudioContext); // recipe, volume, pitch, pan
+
+}
+</script>
+</head>
+<body onload="init();">
+DLL versie van beepotron  
+</body>
+
+</html>
+

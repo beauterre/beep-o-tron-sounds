@@ -1,0 +1,18 @@
+BUGS & WISHES:
+[FIXED] stop playback on new sfx.
+[FIXED] Volume envelopes don't seem to work on oscillators, only mods.
+[FIXED] Volume envelopes reversed are very different...
+[FIXED] envelope are sometimes too complicated, need to sort AND undoubled
+[FIXED] volume envelope multiply by set volume.
+[FIXED] frequency envelopes multiply by set frequency?
+// set k:"beep-o-tron"
+and v:1.0
+
+
+// noise?
+
+import/export as lib (also categories)
+check / visualise undo buffer.
+auto convert e: to ve (version!)
+export as wav
+frequency envelope

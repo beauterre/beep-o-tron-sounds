@@ -1,0 +1,672 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - Beep-o-tron demo</title>
+  <script type='text/javascript' src='beepotron.js'></script>
+  <style type='text/css'>
+    body {
+	font-size:14px;
+	font-family:Arial;
+	font-weight:normal;
+}
+#cat-container{
+}	
+#controls{
+	width: 500px;
+	position: relative;
+}	
+.range-container{
+	padding: 0px;
+	margin: 0px;
+	width: 500px;
+	height: 25px;
+	overflow: hidden;
+	background-color: #ccc;
+	display: table-cell; vertical-align: middle;
+	position: absolute;
+}
+.range-label{
+	position: absolute;
+	width: 250px;
+	top: -5px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+.range-input{
+	position: absolute;
+	top: -7px;
+	right: 80px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+.range-value{
+	position: absolute;
+	right: 0px;
+	width: 50px;
+	text-align: right;
+	top: -5px;
+	padding: 5px;
+	background-color: #ddd;
+	margin: 5px 0px 0px 0px;
+}
+
+#details {
+margin:0px;padding:0px;
+border:1px solid #000000;
+background-color: #eee;
+width:400px; 
+height: 120px;
+}
+
+#saved {
+margin:0px;padding:0px;
+border:1px solid #000000;
+background-color: #eee;
+width:400px; 
+height: 200px;
+ overflow-y: scroll !important; border: 1px solid #ccc;
+}#saved table{
+width:100%;
+margin:0px;padding:0px;
+border-collapse: collapse;
+}
+
+#saved td a {
+   border: 1px solid #333333;
+	border-width: 0px 1px 0px 0px;
+    color: #888;
+    text-decoration: none;
+    padding: 10px 10px 10px 10px;
+    display: inline-block;
+}
+#saved td a:hover {
+    color: #000;
+}
+
+
+#saved td:first-child a {
+    background-color: #ccc;
+    color: #444;
+	width: 200px;
+    text-decoration: none;
+	margin: 0px;
+	text-align: left;
+    padding: 10px 0px 10px 0px;
+    display: inline-block;
+}
+#saved td:first-child a:hover {
+    background-color: #888;
+    color: #ffffff;
+}
+
+#saved td:last-child a {
+   border: 1px solid #666;
+	border-width: 0px 1px 0px 0px;
+    background-color: #999999;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 10px 10px 10px;
+    display: inline-block;
+}
+#saved td:last-child a:hover {
+    background-color: #555;
+    color: #ffffff;
+}
+#saved tr:nth-child(odd)  { background-color:#ddd; }
+#saved tr:nth-child(even) { background-color:#eee; }
+#saved td{
+vertical-align:middle;
+border:1px solid #000000;
+border-width:1px 0px 0px 0px;
+text-align:left;
+padding:0px;
+font-size:14px;
+font-family:Arial;
+font-weight:normal;
+color:#000000;
+}
+#saved tr:first-child td{
+background-color:#bbb;
+border:0px solid #000000;
+text-align:center;
+border-width:1px 0px 0px 0px;
+font-size:16px;
+font-family:Arial;
+font-weight:bold;
+color:#fff;
+    padding: 5px 0px 5px 0px;
+}
+#saved tr td:last-child{
+text-align:right;
+}
+
+  </style>
+  
+<script type='text/javascript'>//<![CDATA[
+// set a default for the saved data.
+var default_file={
+ v:1.0,
+ current_cat:0,
+ cat:[{lab:"jumps",snds:[]},{lab:"hits",snds:[]},{lab:"spawns",snds:[]},{lab:"bonuses",snds:[]},{lab:"enemy",snds:[]},{lab:"bad",snds:[]}]
+}
+// put some defaults in.
+	default_file.cat[0].snds.push({name:"jump",r:'{"o":[{"t":2,"f":376.9,"v":0.9,"c":-1},{"t":1,"f":0.1,"v":287,"c":6},{"t":2,"f":0.8,"v":14,"c":2},{"t":3,"f":1.1,"v":376.6,"c":5},{"t":3,"f":6.1,"v":316.1,"c":0},{"t":1,"f":6.2,"v":731.1,"c":3},{"t":1,"f":5.3,"v":274,"c":2},{"t":1,"f":34.4,"v":882,"c":6}],"l":0.30000000000000004,"e":[{"t":0,"v":1},{"t":1,"v":0}],"v":1}'});
+	default_file.cat[1].snds.push({name:"boom",r:'{"o":[{"t":0,"f":128.7,"v":1,"c":-1},{"t":2,"f":1,"v":670.7,"c":0,"m":"f"},{"t":3,"f":1.7,"v":985.7,"c":1,"m":"f"},{"t":2,"f":1.2,"v":422.5,"c":2,"m":"f"},{"t":2,"f":1.7,"v":48.4,"c":3,"m":"f"},{"t":2,"f":5.5,"v":284.1,"c":4,"m":"f"}],"v":1,"l":1.1,"e":[{"t":0,"v":1},{"t":1,"v":0}]}'});
+	default_file.cat[2].snds.push({name:"blirp",r:'{"o":[{"t":2,"f":1052.5,"v":1,"c":-1},{"t":3,"f":0.4,"v":758.7,"c":0,"m":"f"},{"t":2,"f":1.6,"v":121.7,"c":1,"m":"f"},{"t":3,"f":0.5,"v":70.1,"c":2,"m":"f"},{"t":1,"f":0.4,"v":995.6,"c":3,"m":"f"},{"t":0,"f":1.2,"v":280.7,"c":4,"m":"f"}],"v":1,"l":0.2,"e":[{"t":0,"v":1},{"t":1,"v":0}]}'});
+	default_file.cat[3].snds.push({name:"pickup",r:'{"o":[{"t":0,"f":644.4,"v":1,"c":-1},{"t":3,"f":0.4,"v":699.9,"c":0,"m":"f"},{"t":2,"f":1.4,"v":406.1,"c":1,"m":"f"},{"t":1,"f":1.9,"v":70.9,"c":2,"m":"f"},{"t":3,"f":2.5,"v":202.7,"c":3,"m":"f"},{"t":0,"f":2.9,"v":813.8,"c":4,"m":"f"}],"v":1,"l":0.4,"e":[{"t":0,"v":1},{"t":1,"v":0}]}'});
+	default_file.cat[4].snds.push({name:"alien",r:'{"o":[{"t":0,"f":668.5,"v":1,"c":-1},{"t":0,"f":0.6,"v":461.6,"c":0,"m":"f"},{"t":3,"f":1.5,"v":915.3,"c":1,"m":"f"},{"t":1,"f":2.9,"v":966.6,"c":2,"m":"f"},{"t":0,"f":1.7,"v":8.5,"c":3,"m":"f"},{"t":2,"f":9.8,"v":0,"c":4,"m":"f"}],"v":1,"l":1.6,"e":[{"t":0,"v":1},{"t":1,"v":0}]}'});
+
+var saved=JSON.parse(JSON.stringify(default_file));// clone into saved!
+	
+// get the cookie if it's there!
+if(typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+	var stored_stuff=localStorage.beepotron;
+	if(typeof(stored_stuff)=="undefined")
+	{
+		console.log("no previous cookie, initialising for ya");
+		localStorage.setItem("beepotron", JSON.stringify(saved));
+	}else
+	{
+		saved=JSON.parse(stored_stuff);
+		console.log("saved file of version "+saved.v);
+		if(typeof(saved.v)==="undefined")
+		{
+			// you are getting the defaults.
+			console.log("previous cookie not usefull, initialising for ya");
+			localStorage.setItem("beepotron", JSON.stringify(default_file));
+			saved=JSON.parse(JSON.stringify(default_file));// clone into saved!
+		}else
+		{
+			console.log("your recipes loaded from cookie!");
+		}
+	}
+} else {
+    // Sorry! No Web Storage support..
+	console.log("no web storage support, so just added some defaults");
+}
+
+var controls=[];
+function createRange(label,text,min,max,val,step)
+{
+	var div=document.createElement("div");
+	div.className ="range-container";
+	var lab=document.createElement("span");
+	lab.innerHTML=text;
+	lab.className ="range-label";
+	var v=document.createElement("span");
+	v.innerHTML=val;
+	v.className ="range-value";
+	var r = document.createElement("INPUT");
+	r.className="range-input";
+	
+	r.setAttribute("type", "range");
+	r.setAttribute("min", min);
+	r.setAttribute("max", max);
+	r.setAttribute("value", val);
+	r.setAttribute("step", step);
+	r.setAttribute("id", "range"+controls.length);
+	r.setAttribute("oninput", "rangeVal(this.id,this.value)");
+	r.setAttribute("onchange", "rangeVal(this.id,this.value)");
+	div.appendChild(lab);
+	div.appendChild(r);
+	div.appendChild(v);
+	div.style.top=controls.length*25+"px";
+	document.getElementById("controls").appendChild(div);
+	controls.push({val:val,l:label,r:r,v:v,d:div});
+}
+function rangeVal(id,val)
+{
+	var nr=parseInt(id.substr(5,100));
+	changeControl(nr,val);
+}
+function setControl(lab,val)
+{
+	console.log("setControl "+lab+" to "+val);
+	var i;
+	for(i=0;i<controls.length;i++)
+	{	
+		if(controls[i].l==lab)
+		{
+			controls[i].v.innerHTML=val;
+			controls[i].r.value=val;
+		}
+	}
+}
+function changeControl(nr,val)
+{	
+	controls[nr].v.innerHTML=val;
+	switch(controls[nr].l)
+	{
+		case "length":
+			changeRecipeLength(parseFloat(val));
+		break;
+		default:
+		 console.log("don't know how to handle range: "+controls[nr].l);
+	}
+	controls[nr].val=val;
+}
+window.onload=function(){
+	document.getElementById("start").addEventListener("click", pressPlay);
+	document.getElementById("create").addEventListener("click", createNew);
+	document.getElementById("vary").addEventListener("click", varyRecipe);
+	document.getElementById("varytone").addEventListener("click", varyRecipeTone);
+	document.getElementById("loop").addEventListener("click", changeLoop);
+	document.getElementById("save").addEventListener("click", saveRecipe);
+	// create ranges
+	createRange("length","Lengte huidige geluid",0,5,recipe.l,0.1);
+	createRange("complexity","Complexiteit nieuw geluid",0,7,4,1);
+	createRange("harmony","Aantal tonen nieuw geluid",1,8,1,1);
+	createNew(false);
+	showSaved();
+	setTimeout(playSound,100);
+};
+function basicRecipeFormatting(str)
+{
+	str=str.replace(":[", ":[\n");
+	str=str.replace('"f":', '"f":');
+	for(var i=0;i<recipe.o.length;i++)
+		str=str.replace('},{"t"', '},\n{"t"');
+	str=str.replace('},{"t"', '},\n{"t"');
+	str=str.replace("],", "\n],\n");
+	str=str.replace('"l"', '\n"l"');
+	str=str.replace('"e"', '\n"e"');
+	return str;
+}
+function addToUndoBuffer(r)
+{
+	if(undo[undo.length-1]!=r) // if something actually changed!
+		undo.push(r);
+}
+function changeRecipeLength(l)
+{
+	addToUndoBuffer(recipe);
+	recipe=JSON.parse(document.getElementById("recipe").value);
+	recipe.l=l;
+	recipe.e=[{t:0,v:1},{t:l,v:0}];// envelop fade
+	showRecipe(JSON.stringify(recipe));
+}
+
+function varyRecipeTone()
+{
+	addToUndoBuffer(recipe);
+	recipe=JSON.parse(document.getElementById("recipe").value);
+	recipe.e=[{t:0,v:1},{t:1,v:0}];// envelop fade
+	recipe.v=1;
+	var i;
+	for(i=0;i<recipe.o.length;i++)
+	{
+		var o=recipe.o[i];
+		o.t=Math.floor(Math.random()*4);
+	}
+	showRecipe(JSON.stringify(recipe));
+	var loop=document.getElementById("loop").checked;
+	if(!loop)
+	playSound();
+}
+
+function varyRecipe()
+{
+	addToUndoBuffer(recipe);
+	recipe=JSON.parse(document.getElementById("recipe").value);
+	recipe.l=0.1+Math.round(Math.random()*20)/10;
+	recipe.e=[{t:0,v:1},{t:1,v:0}];// envelop fade
+	recipe.v=1;
+	var i;
+	var nr_of_osc=0;
+	for(i=0;i<recipe.o.length;i++)
+		if(recipe.o[i].c==-1) nr_of_osc++;
+	for(i=0;i<recipe.o.length;i++)
+	{
+		var o=recipe.o[i];
+		o.f*=0.9+0.2*Math.random();
+		if(o.c==-1)
+		{
+			o.v=(Math.random()*0.9+0.1)/nr_of_osc;
+		}else
+		{
+			o.v*=0.9+0.2*Math.random();
+		}
+		o.f=Math.round(o.f*10)/10;
+		o.v=Math.round(o.v*10)/10;
+	}
+	setControl("length",recipe.l);
+	showRecipe(JSON.stringify(recipe));
+	var loop=document.getElementById("loop").checked;
+	if(!loop)
+	playSound();
+}
+// bestandsbeheer
+
+function loadRecipe(w,cat)
+{
+	var saved_array=saved.cat[cat].snds;
+	var str=saved_array[w].r;
+	var ta=document.getElementById("recipe");
+	str=basicRecipeFormatting(str);
+	ta.value = str;
+	// MAAR DOE WEL EVEN DE LOOP UIT!
+	document.getElementById("loop").checked=false;
+	playSound();
+	
+	// set Details of this recipe!
+	setFileDetails(w,cat);
+}
+
+
+function setFileDetails(nr,cat)
+{
+	var saved_array=saved.cat[cat].snds;
+	var div=document.getElementById("details");
+	var str="geluid "+(nr+1)+"/"+saved.cat[cat].snds.length+" van categorie "+saved.cat[cat].lab+", grootte "+saved_array[nr].r.length+" bytes";
+	str+="<hr>Naam: <input type='text' id='renamesoundinput' value='"+saved_array[nr].name+"'></input><button onClick='javascript:renameSound("+nr+","+cat+")'>Hernoem</button>";
+	div.innerHTML=str;
+}
+function mixRecipe(nr,cat)
+{
+	alert("sorry, dit werkt nog niet.");
+}
+
+function renameSound(nr,cat)
+{
+	var new_name=document.getElementById("renamesoundinput").value;
+	console.log("renameSound(nr,cat,"+new_name+")");
+	saved.cat[cat].snds[nr].name=new_name;
+	showSaved();
+	setFileDetails(nr,cat);	
+}
+function removeRecipe(nr,cat)
+{
+	var saved_array=saved.cat[cat].snds;
+	saved_array.splice(nr,1);
+	showSaved();
+}
+function moveRecipe(nr,cat,d)
+{
+	var saved_array=saved.cat[cat].snds;
+	if(nr==0 && d==1)
+	{
+		return;
+	}
+	if(nr==(saved.length-1) && d==-1)
+	{
+		return;
+	}
+	var temp=saved_array[nr];
+	saved_array.splice(nr,1);
+	saved_array.splice(nr-d, 0, temp); 
+	showSaved();
+}
+
+function saveRecipe()
+{
+	var error=false;
+    try{
+        recipe=JSON.parse(document.getElementById("recipe").value);
+    }catch(e){
+		// show that it's wrong..
+		error=true;
+		window.prompt("Current JSON contains errors and cannot be saved.");
+		return;
+    }
+
+
+	var saved_array=saved.cat[saved.current_cat].snds;
+	var name=saved.cat[saved.current_cat].lab+" "+(saved_array.length+1);
+	name=window.prompt("New sound name?",name);
+	if(name!=null)
+	{
+		saved_array.push({name:name,r:JSON.stringify(recipe)});
+		showSaved();
+	}
+}
+
+function setCategory()
+{
+	// user changed categories.
+	var x = document.getElementById("categories").value;
+	saved.current_cat=parseInt(x);
+	showSaved();
+}
+function showSaved()
+{
+	// if we need to show it, we also need to copy it to local storage!
+	localStorage.setItem("beepotron", JSON.stringify(saved));
+	var saved_array=[];
+	if(parseInt(saved.current_cat)==-1)
+	{
+		var i;
+		for(i=0;i<saved.cat.length;i++)
+		{
+			var j=0;
+			var arr=saved.cat[i].snds;
+			for(j=0;j<arr.length;j++)
+			{	
+				var o=JSON.parse(JSON.stringify(arr[j]));
+				o.cat=i;
+				o.nr=j;
+				o.name="["+saved.cat[i].lab.substr(0,3)+"] "+o.name;
+				saved_array.push(o);
+			}
+		}
+		// we moeten even iets anders doen!
+	}else
+	{
+		console.log("saved.current_cat="+saved.current_cat);
+		saved_array=saved.cat[saved.current_cat].snds;
+	}
+	var str="<table><tr><td>Geluiden</td><td>Acties</td><td>";
+	str+="</td></tr>";
+	var cat=saved.current_cat;
+	for(i=0;i<saved_array.length;i++)
+	{
+		var nr=i;
+		if(saved.current_cat==-1)
+		{
+			cat=saved_array[i].cat;
+			nr=saved_array[i].nr;
+		}
+		str+="<tr><td><a href='javascript:loadRecipe("+nr+","+cat+");'>"+(i+1)+" &#9658; "+saved_array[i].name+"</a></td>";
+		str+="<td>";
+	//		str+="<a href='javascript:exportRecipe("+i+");'>Export to Wav</a>";
+		str+=" <a href='javascript:mixRecipe("+nr+","+cat+");'>Mix</a></td>";
+		str+="<td><a href='javascript:moveRecipe("+nr+","+cat+",1);'>&#x25B2;</a>";
+		str+="<a href='javascript:moveRecipe("+nr+","+cat+",-1);'>&#x25BC;</a>";
+		str+="<a href='javascript:removeRecipe("+nr+","+cat+");'>X</a></td></tr>";
+	}
+	str+="</table>"
+	document.getElementById("saved").innerHTML=str;
+	
+	// show categorieen.
+
+	var str="";
+		str+="<select id='categories' onChange='setCategory()'>";
+	var i;
+	for(i=0;i<saved.cat.length;i++)
+	{
+		var extra="";
+		if(i==saved.current_cat)
+		{
+			extra="selected";
+		}		
+		str+="<option "+extra+" value='"+i+"'>"+saved.cat[i].lab+"</option>";
+	}
+	extra="";
+	if(saved.current_cat==-1) extra="selected";
+	str+="<option "+extra+" value='-1'>Alles</option>";
+	str+="</select><button onClick='createCategory();'>+</button><button onClick='deleteCategory();'>-</button><button onClick='renameCategory();'>hernoem</button>";
+	var cat_div=document.getElementById("cat-container").innerHTML=str;
+}
+function createCategory()
+{
+	var name=prompt("Geef een naam op voor de nieuwe categorie");
+	if(name!=null)
+	{
+		var i=0;
+		var bestaat_al=false;
+		for(i=0;i<saved.cat.length;i++)
+		{
+			if(saved.cat[i].lab==name)
+			{
+				saved.current_cat=i;
+				bestaat_al=true;
+			}
+		}
+		if(bestaat_al==false)
+		{
+			saved.current_cat=saved.cat.length;
+			saved.cat.push({lab:name,snds:[]});
+			
+		}else
+		{
+			window.alert("deze categorie bestaat al.");
+		}
+	}
+	showSaved();
+}
+function deleteCategory()
+{
+	if(saved.current_cat==-1)
+	{
+		if(confirm("Weet je heel zeker, dat ALLE geluiden wilt verwijderen?"))
+		{
+			saved.cat=[];
+		}
+	}else{
+		if(saved.cat[saved.current_cat].snds.length==0)
+		{
+			saved.cat.splice(saved.current_cat,1);
+			saved.current_cat--;
+		}
+		else if(confirm("Weet je zeker, dat je alle ("+saved.cat[saved.current_cat].snds.length+") geluiden uit de categorie: '"+saved.cat[saved.current_cat].lab+"' wilt verwijderen?"))
+		{
+			saved.cat.splice(saved.current_cat,1);
+			saved.current_cat--;
+		}
+	}
+	showSaved();
+}
+function renameCategory()
+{
+	if(saved.current_cat==-1) return;
+	var name=prompt("Geef een nieuwe naam op voor categorie: '"+saved.cat[saved.current_cat].lab+"'");
+	if(name!=null)
+	{
+		saved.cat[saved.current_cat].lab=name;
+		showSaved();
+	}
+
+}
+
+function createNew(play)
+{
+	console.log("createNew "+controls[1].val+","+controls[2].val)
+	var recipe=createRecipe(controls[1].val,controls[2].val);
+	// set the value of length range.
+	setControl("length",recipe.l);
+	
+	addToUndoBuffer(recipe);
+	showRecipe(JSON.stringify(recipe));
+	if(play)playSound();
+}
+function showRecipe(str)
+{
+	var ta=document.getElementById("recipe");
+	str=basicRecipeFormatting(str);
+	ta.value = str;
+}
+function changeLoop()
+{
+	var loop=document.getElementById("loop").checked;
+	var play=document.getElementById("start");
+	play.innerHTML="&#9658;";
+}
+function pressPlay()
+{
+	var loop=document.getElementById("loop").checked;
+	var play=document.getElementById("start");
+	console.log("play.innerHTML"+play.innerHTML);
+	var looping=(play.innerHTML.length>1); // it's a pause thing, else it's a play thing, which is 1 character!
+	if(looping)
+	{
+		console.log("we were looping");
+		play.innerHTML="&#9658;";
+		document.getElementById("loop").checked = false;
+	}else
+	{
+		if(loop) // loop flag on, we'll be going into a loop
+		{
+			play.innerHTML="&#10074; &#10074;";
+			// it's allready playing, guess you want to stop?
+			playSound();
+		}else
+		{
+			play.innerHTML="&#9658;";
+			playSound();
+		}
+
+	}
+}
+
+function playSound()
+{
+	var r=recipe;
+	var error=false;
+    try{
+        r=JSON.parse(document.getElementById("recipe").value);
+    }catch(e){
+		// show that it's wrong..
+		error=true;
+		r=undo[undo.length-1];// don't change it, until it is no longer broken.
+    }
+	if(error) document.getElementById("recipe").style.color="#f00";
+	else document.getElementById("recipe").style.color="#000";
+	playBeepoTron(r,1,0); // volume, pitch
+	var loop=document.getElementById("loop").checked;
+	if(loop)
+	{
+		setTimeout(playSound,r.l*1000+300); // it doesn't slow down is l is made longer?
+	}
+}
+var undo=[];
+//]]> 
+
+</script>
+
+</head>
+<body>
+<table border="1">
+<tr>
+<td>
+<span class='titel'>Beep-o-tron</span> - maak je eigen game geluiden</span><br>
+<textarea id="recipe" rows="15" cols="70">
+</textarea><br>
+<div id="commands">
+<button id="start">&#9658;</button>
+<input type="checkbox" id="loop" value="0"> Loop<br>
+<button id="create">Willekeurig</button>
+<button id="vary">Variatie</button>
+<button id="varytone">Varieer Klank</button>
+<button id="save">Opslaan</button>
+</div>
+<div id="controls">
+</div>
+</td>
+<td>
+<span>Bewaarde geluiden -catergorie: </span><span id="cat-container"></span>
+<div id="saved">
+</div>
+<div id="details">
+</div>
+</td>
+</tr>
+</table>
+  
+</body>
+
+</html>
+
