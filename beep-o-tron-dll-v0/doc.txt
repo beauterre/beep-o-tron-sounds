@@ -1,0 +1,8 @@
+This won't work in direct mode, use
+a localhost or server.
+Else the postmessage will fail!
+
+Also, on some mobile devices, this will never produce sound, unless
+you can relay a click to this...
+
+So the thinking is sound for just about all BUT sound and video..
